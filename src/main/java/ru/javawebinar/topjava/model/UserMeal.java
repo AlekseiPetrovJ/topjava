@@ -20,7 +20,9 @@ public class UserMeal {
         return dateTime;
     }
 
-    public LocalDate getDate() {return dateTime.toLocalDate();}
+    public LocalDate getDate() {
+        return dateTime.toLocalDate();
+    }
 
     public String getDescription() {
         return description;
