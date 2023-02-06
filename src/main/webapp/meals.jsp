@@ -14,7 +14,8 @@
 
     <style type="text/css">
         TABLE {
-            width: 500px; /* Ширина таблицы */
+            /*width: 600px;*/
+
             border-collapse: collapse; /* Убираем двойные линии между ячейками */
         }
 
@@ -37,27 +38,41 @@
 <hr>
 <h2>Meals</h2>
 <table>
-    <caption>Meals</caption>
+    <a href="meals?add=true">Add meal</a>
+
     <tr>
 
         <th>Date</th>
+        <th>ID</th>
         <th>Description</th>
         <th>Calories</th>
     </tr>
 
     <jsp:useBean id="mealsTos" scope="request" type="java.util.List"/>
     <c:forEach var="mealslist" items="${mealsTos}">
-        <tr class="green">
-        <c:if test="${mealslist.excess == true}">
+
+        <form action="/topjava/meals">
+
+            <tr class="green">
+                <c:if test="${mealslist.excess == true}">
             <tr class="red">
-        </c:if>
-        <fmt:parseDate value="${ mealslist.dateTime }" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime"
-                       type="both"/>
-        <td><fmt:formatDate pattern="dd.MM.yyyy HH:mm" value="${ parsedDateTime }"/>
-        </td>
-        <td>${mealslist.description}</td>
-        <td>${mealslist.calories}</td>
+
+                </c:if>
+
+
+                    <fmt:parseDate value="${ mealslist.dateTime }" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime"
+                                   type="both"/>
+                <td><fmt:formatDate pattern="dd.MM.yyyy HH:mm" value="${ parsedDateTime }"/>
+                </td>
+
+                <td><input type="text" id="id" name="id" value=${mealslist.id} readonly size="5"><br></td>
+                <td>${mealslist.description}</td>
+                <td>${mealslist.calories}</td>
+                <td><input type="submit" name="edit" value="edit"></td>
+                <td><a href="meals?delete=true&id=${mealslist.id}">delete</a></td>
+        </form>
         </tr>
+
     </c:forEach>
 </table>
 
