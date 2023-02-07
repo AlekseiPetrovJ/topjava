@@ -8,8 +8,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class MealDaoImpl implements MealDao {
-    private static final Map<Integer, Meal> meals = new ConcurrentHashMap<>();
-
+    private final Map<Integer, Meal> meals = new ConcurrentHashMap<>();
 
     @Override
     public void addMeal(Meal meal) {

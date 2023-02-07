@@ -48,12 +48,12 @@ public class MealServlet extends HttpServlet {
             }
             Meal addedMeal;
             if (id == null) {
-                addedMeal = new Meal(localDateTime, description, calories, GeneratorID.getId());
+                addedMeal = new Meal(GeneratorID.getId(), localDateTime, description, calories);
                 mealDao.addMeal(addedMeal);
                 log.debug("added meal" + addedMeal);
 
             } else {
-                addedMeal = new Meal(localDateTime, description, calories, id);
+                addedMeal = new Meal(id, localDateTime, description, calories);
                 mealDao.updateMeal(id, addedMeal);
                 log.debug("edit meal" + addedMeal);
             }

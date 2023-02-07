@@ -43,7 +43,6 @@
     <tr>
 
         <th>Date</th>
-        <th>ID</th>
         <th>Description</th>
         <th>Calories</th>
     </tr>
@@ -53,21 +52,16 @@
 
         <form action="/topjava/meals">
 
-            <tr class="green">
-                <c:if test="${mealslist.excess == true}">
-            <tr class="red">
-
-                </c:if>
-
+            <tr class=${mealslist.excess == true ?  'red'  : 'green'}>>
 
                     <fmt:parseDate value="${ mealslist.dateTime }" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime"
                                    type="both"/>
-                <td><fmt:formatDate pattern="dd.MM.yyyy HH:mm" value="${ parsedDateTime }"/>
+                <td><fmt:formatDate pattern="yyyy-MM-dd HH:mm" value="${ parsedDateTime }"/>
                 </td>
 
-                <td><input type="text" id="id" name="id" value=${mealslist.id} readonly size="5"><br></td>
                 <td>${mealslist.description}</td>
                 <td>${mealslist.calories}</td>
+                <td><input type="text" id="id" name="id" value=${mealslist.id} hidden size="5"><br></td>
                 <td><input type="submit" name="edit" value="edit"></td>
                 <td><a href="meals?delete=true&id=${mealslist.id}">delete</a></td>
         </form>
@@ -75,7 +69,6 @@
 
     </c:forEach>
 </table>
-
 
 </body>
 </html>

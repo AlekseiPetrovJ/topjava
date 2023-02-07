@@ -9,9 +9,9 @@ public interface MealDao {
 
     void addMeal(Meal meal);
 
-    void delete(int mealId);
+    void delete(int id);
 
-    Meal getMealById(int mealId);
+    Meal getMealById(int id);
 
     List<Meal> getAllMeals();
 }

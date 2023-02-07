@@ -33,22 +33,19 @@
 
     <tr>
         <th>Date</th>
-        <th>ID</th>
         <th>Description</th>
         <th>Calories</th>
     </tr>
 
-
     <tr>
         <form action="/topjava/meals">
             <td><input type="datetime-local" name="datetime" value=${meal.dateTime}></td>
-            <td><input type="text" id="id" name="id" readonly size="5" value=${meal.id}><br></td>
             <td><input type="text" name="description" value=${meal.description}></td>
             <td><input type="number" name="calories" value=${meal.calories}></td>
+            <td><input type="text" id="id" name="id" hidden size="5" value=${meal.id}><br></td>
             <td><input type="submit" name="save" value="save"></td>
             <td><input type="hidden" name="saveAdd" value="true"></td>
         </form>
-
 
         <td>
             <button onclick="window.history.back()" type="button">Cancel</button>
@@ -57,7 +54,6 @@
     </tr>
 
 </table>
-
 
 </body>
 </html>
