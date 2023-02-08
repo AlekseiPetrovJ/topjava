@@ -28,7 +28,8 @@
 <body>
 <h3><a href="index.html">Home</a></h3>
 <hr>
-<h2>Edit meal</h2>
+
+<h2>${addedForm == true ?  'Add'  : 'Edit'} meal</h2>
 <table>
 
     <tr>
@@ -44,7 +45,7 @@
             <td><input type="number" name="calories" value=${meal.calories}></td>
             <td><input type="number" id="id" name="id" hidden value=${meal.id}><br></td>
             <td><input type="submit" name="save" value="save"></td>
-            <td><input type="hidden" name="saveAdd" value="true"></td>
+            <td><input type="hidden" name="action" value="save"></td>
         </form>
 
         <td>

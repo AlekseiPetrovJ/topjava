@@ -37,7 +37,7 @@
 <h3><a href="index.html">Home</a></h3>
 <hr>
 <h2>Meals</h2>
-<a href="meals?add=true">Add meal</a>
+<a href="meals?action=openAddForm">Add meal</a>
 
 <table>
 
@@ -58,8 +58,8 @@
             </td>
             <td>${mealslist.description}</td>
             <td>${mealslist.calories}</td>
-            <td><a href="meals?edit=edit&id=${mealslist.id}">edit</a></td>
-            <td><a href="meals?delete=true&id=${mealslist.id}">delete</a></td>
+            <td><a href="meals?action=openEditForm&id=${mealslist.id}">edit</a></td>
+            <td><a href="meals?action=delete&id=${mealslist.id}">delete</a></td>
 
         </tr>
 

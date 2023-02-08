@@ -41,35 +41,39 @@ public class MealServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws
             ServletException, IOException {
+        String action = request.getParameter("action")!=null? request.getParameter("action") : "";
+        //open add form
+        switch (action) {
+            case "openAddForm":
+                request.setAttribute("addedForm", true);
+                request.getRequestDispatcher("/editMeal.jsp").forward(request, response);
+                return;
+            case "save":
+                String datetime = request.getParameter("datetime");
+                String description = request.getParameter("description");
+                int calories = Integer.parseInt(request.getParameter("calories"));
+                LocalDateTime localDateTime = LocalDateTime.parse(datetime);
 
-        if (request.getParameter("add") != null && request.getParameter("add").equals("true")) {
-            request.getRequestDispatcher("/editMeal.jsp").forward(request, response);
-            return;
-        } else if (request.getParameter("saveAdd") != null && request.getParameter("saveAdd").equals("true")) {
-            String datetime = request.getParameter("datetime");
-            String description = request.getParameter("description");
-            int calories = Integer.parseInt(request.getParameter("calories"));
-            LocalDateTime localDateTime = LocalDateTime.parse(datetime);
-
-            if (request.getParameter("id").equals("")) {
-                mealDao.addMeal(localDateTime, description, calories);
-                log.debug("Added new meal");
-            } else {
-                mealDao.updateMeal(new Meal(Integer.parseInt(request.getParameter("id")), localDateTime, description, calories));
-                log.debug("Edit meal {}", request.getParameter("id"));
-            }
-        } else if (request.getParameter("edit") != null && request.getParameter("edit").equals("edit")) {
-            Meal editMeal = mealDao.getMealById(Integer.parseInt(request.getParameter("id")));
-            log.debug("Start edit meal {}", editMeal);
-            request.setAttribute("meal", editMeal);
-            request.getRequestDispatcher("/editMeal.jsp").forward(request, response);
-            return;
-        } else if (request.getParameter("delete") != null && request.getParameter("delete").equals("true")) {
-            int id = Integer.parseInt(request.getParameter("id"));
-            mealDao.delete(id);
-            log.debug("Delete {}", id);
-            response.sendRedirect(request.getContextPath() + "/meals");
-            return;
+                if (request.getParameter("id").equals("")) {
+                    mealDao.addMeal(localDateTime, description, calories);
+                    log.debug("Added new meal");
+                } else {
+                    mealDao.updateMeal(new Meal(Integer.parseInt(request.getParameter("id")), localDateTime, description, calories));
+                    log.debug("Edit meal {}", request.getParameter("id"));
+                }
+                break;
+            case "openEditForm":
+                Meal editMeal = mealDao.getMealById(Integer.parseInt(request.getParameter("id")));
+                log.debug("Open edit meal {}", editMeal);
+                request.setAttribute("meal", editMeal);
+                request.getRequestDispatcher("/editMeal.jsp").forward(request, response);
+                return;
+            case "delete":
+                int id = Integer.parseInt(request.getParameter("id"));
+                mealDao.delete(id);
+                log.debug("Deleted {}", id);
+                response.sendRedirect(request.getContextPath() + "/meals");
+                return;
         }
 
         List<MealTo> mealTos = MealsUtil.filteredByStreams(mealDao.getAllMeals(), LocalTime.MIN, LocalTime.MAX, MAX_COLORIES_PER_DAY);
