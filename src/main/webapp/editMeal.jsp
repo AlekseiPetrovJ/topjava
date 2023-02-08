@@ -38,11 +38,11 @@
     </tr>
 
     <tr>
-        <form action="/topjava/meals">
+        <form action="meals">
             <td><input type="datetime-local" name="datetime" value=${meal.dateTime}></td>
             <td><input type="text" name="description" value=${meal.description}></td>
             <td><input type="number" name="calories" value=${meal.calories}></td>
-            <td><input type="text" id="id" name="id" hidden size="5" value=${meal.id}><br></td>
+            <td><input type="number" id="id" name="id" hidden value=${meal.id}><br></td>
             <td><input type="submit" name="save" value="save"></td>
             <td><input type="hidden" name="saveAdd" value="true"></td>
         </form>

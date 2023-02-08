@@ -37,11 +37,11 @@
 <h3><a href="index.html">Home</a></h3>
 <hr>
 <h2>Meals</h2>
+<a href="meals?add=true">Add meal</a>
+
 <table>
-    <a href="meals?add=true">Add meal</a>
 
     <tr>
-
         <th>Date</th>
         <th>Description</th>
         <th>Calories</th>
@@ -50,21 +50,17 @@
     <jsp:useBean id="mealsTos" scope="request" type="java.util.List"/>
     <c:forEach var="mealslist" items="${mealsTos}">
 
-        <form action="/topjava/meals">
+        <tr class=${mealslist.excess == true ?  'red'  : 'green'}>
 
-            <tr class=${mealslist.excess == true ?  'red'  : 'green'}>>
+            <fmt:parseDate value="${ mealslist.dateTime }" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime"
+                           type="both"/>
+            <td><fmt:formatDate pattern="yyyy-MM-dd HH:mm" value="${ parsedDateTime }"/>
+            </td>
+            <td>${mealslist.description}</td>
+            <td>${mealslist.calories}</td>
+            <td><a href="meals?edit=edit&id=${mealslist.id}">edit</a></td>
+            <td><a href="meals?delete=true&id=${mealslist.id}">delete</a></td>
 
-                    <fmt:parseDate value="${ mealslist.dateTime }" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime"
-                                   type="both"/>
-                <td><fmt:formatDate pattern="yyyy-MM-dd HH:mm" value="${ parsedDateTime }"/>
-                </td>
-
-                <td>${mealslist.description}</td>
-                <td>${mealslist.calories}</td>
-                <td><input type="text" id="id" name="id" value=${mealslist.id} hidden size="5"><br></td>
-                <td><input type="submit" name="edit" value="edit"></td>
-                <td><a href="meals?delete=true&id=${mealslist.id}">delete</a></td>
-        </form>
         </tr>
 
     </c:forEach>
