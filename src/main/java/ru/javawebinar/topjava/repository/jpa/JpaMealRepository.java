@@ -20,24 +20,16 @@ public class JpaMealRepository implements MealRepository {
     @Override
     @Transactional
     public Meal save(Meal meal, int userId) {
-
+        Meal copyMeal = new Meal(meal);
+        copyMeal.setUser(em.getReference(User.class, userId));
         if (meal.isNew()) {
-            User dummy = em.getReference(User.class, userId);
-            Meal copyMeal = new Meal(meal);
-            copyMeal.setUser(dummy);
             em.persist(copyMeal);
             return copyMeal;
         } else {
-            if (em.createNamedQuery(Meal.UPDATE)
-                    .setParameter("id", meal.getId())
-                    .setParameter("user_id", userId)
-                    .setParameter("date_time", meal.getDateTime())
-                    .setParameter("calories", meal.getCalories())
-                    .setParameter("description", meal.getDescription())
-                    .executeUpdate() != 0) {
-                return meal;
+            Meal changingMeal = em.find(Meal.class, meal.getId());
+            if (changingMeal.getUser().getId() == userId) {
+                return em.merge(copyMeal);
             } else {
-
                 return null;
             }
         }
@@ -54,10 +46,12 @@ public class JpaMealRepository implements MealRepository {
 
     @Override
     public Meal get(int id, int userId) {
-        return em.createNamedQuery(Meal.GET, Meal.class)
-                .setParameter("id", id)
-                .setParameter("user_id", userId)
-                .getSingleResult();
+        Meal meal = em.find(Meal.class, id);
+        if (meal != null && meal.getUser().getId() == userId) {
+            return meal;
+        } else {
+            return null;
+        }
     }
 
     @Override

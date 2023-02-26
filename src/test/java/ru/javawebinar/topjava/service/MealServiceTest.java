@@ -3,11 +3,9 @@ package ru.javawebinar.topjava.service;
 import org.junit.AfterClass;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.TestRule;
-import org.junit.rules.TestWatcher;
+import org.junit.rules.Stopwatch;
 import org.junit.runner.Description;
 import org.junit.runner.RunWith;
-import org.junit.runners.model.Statement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,13 +16,9 @@ import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
-import ru.javawebinar.topjava.web.user.InMemoryAdminRestControllerTest;
 
-import javax.persistence.NoResultException;
 import java.time.LocalDate;
 import java.time.Month;
-import java.util.HashMap;
-import java.util.Map;
 
 import static org.junit.Assert.assertThrows;
 import static ru.javawebinar.topjava.MealTestData.*;
@@ -39,39 +33,33 @@ import static ru.javawebinar.topjava.UserTestData.USER_ID;
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
 
 public class MealServiceTest {
-    private static final Logger log = LoggerFactory.getLogger(InMemoryAdminRestControllerTest.class);
-    private static final Map<String, Long> testDuration = new HashMap<>();
+    private static final Logger log = LoggerFactory.getLogger(MealServiceTest.class);
+    private static final StringBuilder totalDuration = new StringBuilder();
 
     @Rule
-    public final TestRule watchman = new TestWatcher() {
-        private long startTime;
-
+    public Stopwatch stopwatch = new Stopwatch() {
         @Override
-        public Statement apply(Statement base, Description description) {
-            return super.apply(base, description);
-        }
-
-        @Override
-        protected void starting(Description description) {
-            super.starting(description);
-            startTime = System.currentTimeMillis();
-        }
-
-        @Override
-        protected void finished(Description description) {
-            super.finished(description);
-            Long duration = (System.currentTimeMillis() - startTime);
-            log.info("finished {}", description.getMethodName() + " " + duration + "ms");
-            testDuration.put(description.getMethodName(), duration);
+        protected void succeeded(long nanos, Description description) {
+            totalDuration
+                    .append("\n")
+                    .append(String.format("| %-30s| ", description.getMethodName()))
+                    .append(nanos / (1000 * 1000))
+                    .append(String.format("%-3s|", "ms"));
         }
     };
+
     @Autowired
     private MealService service;
+
+    @AfterClass
+    public static void runAfterClass() {
+        log.info(totalDuration.toString());
+    }
 
     @Test
     public void delete() {
         service.delete(MEAL1_ID, USER_ID);
-        assertThrows(NoResultException.class, () -> service.get(MEAL1_ID, USER_ID));
+        assertThrows(NotFoundException.class, () -> service.get(MEAL1_ID, USER_ID));
     }
 
     @Test
@@ -108,12 +96,12 @@ public class MealServiceTest {
 
     @Test
     public void getNotFound() {
-        assertThrows(NoResultException.class, () -> service.get(NOT_FOUND, USER_ID));
+        assertThrows(NotFoundException.class, () -> service.get(NOT_FOUND, USER_ID));
     }
 
     @Test
     public void getNotOwn() {
-        assertThrows(NoResultException.class, () -> service.get(MEAL1_ID, ADMIN_ID));
+        assertThrows(NotFoundException.class, () -> service.get(MEAL1_ID, ADMIN_ID));
     }
 
     @Test
@@ -145,10 +133,5 @@ public class MealServiceTest {
     @Test
     public void getBetweenWithNullDates() {
         MEAL_MATCHER.assertMatch(service.getBetweenInclusive(null, null, USER_ID), meals);
-    }
-
-    @AfterClass
-    public static void runAfterClass() {
-        testDuration.forEach((s, aLong) -> log.info(s + " " + aLong + "ms"));
     }
 }
