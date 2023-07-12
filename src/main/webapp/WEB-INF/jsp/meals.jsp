@@ -11,7 +11,7 @@
 <section>
 
     <h3><spring:message code="meal.title"/></h3>
-    <form method="get" action="/topjava/meals/filter">
+    <form method="get" action="${pageContext.request.contextPath}/meals/filter">
         <dl>
             <dt><spring:message code="filter.startDate"/></dt>
             <dd><input type="date" name="startDate" value="${param.startDate}"></dd>
@@ -31,7 +31,7 @@
         <button type="submit"><spring:message code="filter.submit"/></button>
     </form>
     <hr/>
-    <a href="/topjava/meals/new"><spring:message code="meal.addMeal"/></a>
+    <a href="${pageContext.request.contextPath}/meals/new"><spring:message code="meal.addMeal"/></a>
     <br><br>
     <table border="1" cellpadding="8" cellspacing="0">
         <thead>
@@ -54,9 +54,9 @@
                 </td>
                 <td>${meal.description}</td>
                 <td>${meal.calories}</td>
-                <td><a href="meals/${meal.id}"><spring:message code="meal.update"/></a></td>
+                <td><a href="${pageContext.request.contextPath}/meals/${meal.id}"><spring:message code="meal.update"/></a></td>
                 <td>
-                <form method="post" action="/topjava/meals/${meal.id}">
+                <form method="post" action="${pageContext.request.contextPath}/meals/${meal.id}">
                     <input type="hidden" name="_method" value="DELETE">
                     <input type="submit" value=<spring:message code="meal.delete"/>>
                 </form>
