@@ -37,10 +37,10 @@ public class JspMealController extends AbstractMealController {
     }
 
     @GetMapping("/filter")
-    public String edit(@RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
-                       @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate  endDate,
-                       @RequestParam("startTime") LocalTime startTime,
-                       @RequestParam("endTime") LocalTime endTime,
+    public String edit(@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+                       @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+                       @RequestParam(required = false) LocalTime startTime,
+                       @RequestParam(required = false) LocalTime endTime,
                        Model model) {
         log.info("filter meal");
         model.addAttribute("mealsTo", super.getBetween(startDate, startTime, endDate, endTime));
