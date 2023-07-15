@@ -24,14 +24,12 @@ public class JspMealController extends AbstractMealController {
 
     @GetMapping()
     public String getAll(Model model) throws ServletException, IOException {
-        log.info("get all meals");
         model.addAttribute("mealsTo", super.getAll());
         return "meals";
     }
 
     @GetMapping("/{id}")
     public String edit(@PathVariable("id") int id, Model model) {
-        log.info("edit meal {}", id);
         model.addAttribute(super.get(id));
         return "mealForm";
     }
@@ -42,14 +40,12 @@ public class JspMealController extends AbstractMealController {
                        @RequestParam(required = false) LocalTime startTime,
                        @RequestParam(required = false) LocalTime endTime,
                        Model model) {
-        log.info("filter meal");
         model.addAttribute("mealsTo", super.getBetween(startDate, startTime, endDate, endTime));
         return "meals";
     }
 
     @GetMapping("/new")
     public String newMeal(Model model) {
-        log.info("new meal");
         model.addAttribute("action", "new");
         model.addAttribute(new Meal(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES), "", 1000));
         return "mealForm";
@@ -61,7 +57,6 @@ public class JspMealController extends AbstractMealController {
                       @RequestParam("description") String description,
                       @RequestParam("calories") int calories) {
         Meal meal = new Meal(id, LocalDateTime.parse(dateTime), description, calories);
-        log.info("set meal {}", meal);
         super.update(meal, id);
         return "redirect:/meals";
     }
@@ -71,14 +66,12 @@ public class JspMealController extends AbstractMealController {
                          @RequestParam("description") String description,
                          @RequestParam("calories") int calories) {
         Meal meal = new Meal(LocalDateTime.parse(dateTime), description, calories);
-        log.info("set meal {}", meal);
         super.create(meal);
         return "redirect:/meals";
     }
 
     @DeleteMapping("/{id}")
     public String deleteMeal(@PathVariable("id") int id) {
-        log.info("delete meal id {}", id);
         super.delete(id);
         return "redirect:/meals";
     }
