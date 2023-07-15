@@ -22,7 +22,7 @@ public class JspMealController extends AbstractMealController {
         super(service);
     }
 
-    @GetMapping()
+    @GetMapping
     public String getAll(Model model) throws ServletException, IOException {
         model.addAttribute("mealsTo", super.getAll());
         return "meals";
@@ -52,17 +52,17 @@ public class JspMealController extends AbstractMealController {
     }
 
     @PostMapping
-    public String set(@RequestParam("id") int id,
-                      @RequestParam("dateTime") String dateTime,
-                      @RequestParam("description") String description,
-                      @RequestParam("calories") int calories) {
+    public String update(@RequestParam("id") int id,
+                         @RequestParam("dateTime") String dateTime,
+                         @RequestParam("description") String description,
+                         @RequestParam("calories") int calories) {
         Meal meal = new Meal(id, LocalDateTime.parse(dateTime), description, calories);
         super.update(meal, id);
         return "redirect:/meals";
     }
 
     @PostMapping("/new")
-    public String update(@RequestParam("dateTime") String dateTime,
+    public String create(@RequestParam("dateTime") String dateTime,
                          @RequestParam("description") String description,
                          @RequestParam("calories") int calories) {
         Meal meal = new Meal(LocalDateTime.parse(dateTime), description, calories);
